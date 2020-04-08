@@ -1,0 +1,7 @@
+########################
+# Netcup DynDNS Client #
+########################
+[Credentials]
+CUSTOMER_ID     = xxx
+API_KEY         = xxx
+API_PASSWORD    = xxx
