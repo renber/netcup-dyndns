@@ -17,6 +17,8 @@ if __name__ == "__main__":
     has_ipv6, ipv6 = ip_lookup.get_my_public_ipv6()
     print(f"IPv6 address: {ipv6}")
 
+    has_ipv6 = False
+
     if has_ipv4 or has_ipv6:
         # Extract subdomain to update
         print(f"Updating DNS record for '{opts.subdomain}.{opts.domain}' ...")
@@ -25,7 +27,7 @@ if __name__ == "__main__":
         dns.login(auth)
 
         if has_ipv4:
-            print("Updat    ing IPv4")
+            print("Updating IPv4")
             dns.update_ipv4(opts.domain, opts.subdomain, ipv4)
 
         if has_ipv6:

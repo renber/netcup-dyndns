@@ -84,23 +84,26 @@ class NetCupDns:
             raise Exception("Could not update DNS record")
 
     def __update_record(self, domain, subdomain, type, ip):
-        dns_records = self.get_dns_records(domain)
+        success, dns_records = self.get_dns_records(domain)
 
-        # Search for the specified subdomain
-        for item in dns_records:
-            if item["hostname"] == subdomain:
-                if item["type"] == "A":
-                    # Extract information
-                    recordId = item["id"]
+        if success:
+            # Search for the specified subdomain
+            for item in dns_records:
+                if item["hostname"] == subdomain:
+                    if item["type"] == "A":
+                        # Extract information
+                        recordId = item["id"]
 
-                    # UpdateDnsRecord Request
-                    record = { "id": recordId,
-                            "hostname": subdomain,
-                            "type": "A",
-                            "destination": ip
-                            }
+                        # UpdateDnsRecord Request
+                        record = { "id": recordId,
+                                "hostname": subdomain,
+                                "type": "A",
+                                "destination": ip
+                                }
 
-                    self.update_dns_record(domain, record)
+                        self.update_dns_record(domain, record)
+        else:
+            raise Exception("Failed to retrieve DNS records")
 
     def update_ipv4(self, domain, subdomain, ip):
        self.__update_record(domain, subdomain, "A", ip)
@@ -120,6 +123,6 @@ class NetCupDns:
             }
         }
 
-        logoutResponse = requests.post(url=NETCUP_API, json=logoutRequest).json()
+        logoutResponse = requests.post(url=self.API_ENDPOINT, json=logoutRequest).json()
         if logoutResponse["status"] != "success":
             raise Exception("Could not log out from netcup API server")
